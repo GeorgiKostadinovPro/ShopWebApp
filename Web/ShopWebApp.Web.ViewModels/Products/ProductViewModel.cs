@@ -1,11 +1,15 @@
-﻿using System;
+﻿using ShopWebApp.Data.Models;
+using ShopWebApp.Services.Mapping;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace ShopWebApp.Web.ViewModels.Products
 {
-    public class ProductViewModel
+    public class ProductViewModel : IMapFrom<Product>
     {
+        public int Id { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }

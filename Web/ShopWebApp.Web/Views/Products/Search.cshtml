@@ -1,36 +1,7 @@
-﻿@model AllSearchedProductsViewModel
+﻿@using ShopWebApp.Web.ViewModels.Products
+@model AllSearchedProductsViewModel
 
-@using ShopWebApp.Common
-@using ShopWebApp.Web.ViewModels.Products
-
-@{
-    this.ViewData["Title"] = "Home Page";
-}
-
-<div class="text-center">
-    <h1 class="display-4">Welcome to @GlobalConstants.SystemName!</h1>
-    <p style="font-size: 20px;">A simple storage for computers.</p>
-</div>
-
- <link rel="stylesheet" href="~/css/animated-button-index-page.css"> 
-
-<div class="container-button">
-     <a class="button-animated" asp-controller="Products" asp-action="Create">Add Product</a>
-</div>  
-
-<pre class="tab"></pre>
-
- <form style="margin: auto;" method="post" asp-controller="Products" asp-action="Search">
-                <div class="row- rounded-pill text-center">
-                    <input asp-for="@this.Model.Search.Name" class="form-control" placeholder="What are you looking for?">
-                </div>
-                <div>
-                    <button type="submit" class="btn btn-success">Go!</button>
-                </div>
-            </form>
-
-
-   <link rel="stylesheet" href="~/css/index-page-card.css"> 
+  <link rel="stylesheet" href="~/css/index-page-card.css"> 
 
 <main>
   <div class="container-fluid bg-trasparent my-4 p-3" style="position: relative;">

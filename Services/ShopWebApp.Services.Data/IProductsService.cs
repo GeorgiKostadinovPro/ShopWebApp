@@ -12,8 +12,8 @@ namespace ShopWebApp.Services.Data
 
         Task DeleteProduct(int productId);
 
-        Task Update(int productId, InputProductModel inputProductModel);
-
         ICollection<ProductViewModel> GetAll();
+
+        ICollection<ProductViewModel> SearchProduct(string productName);
     }
 }

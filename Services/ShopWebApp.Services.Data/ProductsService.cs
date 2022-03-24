@@ -21,7 +21,8 @@ namespace ShopWebApp.Services.Data
 
         public async Task CreateProduct(InputProductModel inputProductModel)
         {
-            Product product = this.productsRepository.All().FirstOrDefault(p => p.Name == inputProductModel.Name);
+            Product product = this.productsRepository.All()
+                .FirstOrDefault(p => p.Name == inputProductModel.Name && p.Description == inputProductModel.Description);
 
             if (product == null)
             {
@@ -39,19 +40,30 @@ namespace ShopWebApp.Services.Data
             await this.productsRepository.SaveChangesAsync();
         }
 
-        public Task DeleteProduct(int productId)
+        public async Task DeleteProduct(int productId)
         {
-            throw new NotImplementedException();
+            Product product = this.productsRepository
+                .All()
+                .FirstOrDefault(p => p.Id == productId);
+
+            if (product != null)
+            {
+                this.productsRepository.Delete(product);
+            }
+
+            await this.productsRepository.SaveChangesAsync();
         }
 
         public ICollection<ProductViewModel> GetAll()
         {
             return this.productsRepository.All().To<ProductViewModel>().Where(p => p.Stock > 0).ToList();
         }
-
-        public Task Update(int productId, InputProductModel inputProductModel)
+      
+        public ICollection<ProductViewModel> SearchProduct(string productName)
         {
-            throw new NotImplementedException();
+            return this.productsRepository.All().To<ProductViewModel>()
+                .Where(p => p.Name.ToLower().Contains(productName.ToLower()))
+                .ToList();
         }
     }
 }
