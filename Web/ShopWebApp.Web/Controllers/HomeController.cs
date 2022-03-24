@@ -5,9 +5,15 @@
     using ShopWebApp.Web.ViewModels;
 
     using Microsoft.AspNetCore.Mvc;
+    using ShopWebApp.Services.Data;
 
     public class HomeController : BaseController
     {
+        private readonly IProductsService productsService;
+        public HomeController(IProductsService productsService)
+        {
+            this.productsService = productsService;
+        }    
         public IActionResult Index()
         {
             return this.View();

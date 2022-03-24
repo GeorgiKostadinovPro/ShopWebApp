@@ -31,7 +31,6 @@
             this.configuration = configuration;
         }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<ApplicationDbContext>(
@@ -65,6 +64,8 @@
             // Application services
             services.AddTransient<IEmailSender, NullMessageSender>();
             services.AddTransient<ISettingsService, SettingsService>();
+
+            services.AddTransient<IProductsService, ProductsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -72,7 +73,7 @@
         {
             AutoMapperConfig.RegisterMappings(typeof(ErrorViewModel).GetTypeInfo().Assembly);
 
-            // Seed data on application startup
+           
             using (var serviceScope = app.ApplicationServices.CreateScope())
             {
                 var dbContext = serviceScope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
