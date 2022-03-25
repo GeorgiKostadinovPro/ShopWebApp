@@ -60,11 +60,11 @@ namespace ShopWebApp.Web.Controllers
         }
 
         [HttpPost]
-        public IActionResult Search(InputSearchModel searchModel)
+        public IActionResult Search(AllSearchedProductsViewModel searchModel)
         {
             AllSearchedProductsViewModel allSearchedProductsModel = new AllSearchedProductsViewModel
             {
-                Products = this.productsService.SearchProduct(searchModel.Name),
+                Products = this.productsService.SearchProduct(searchModel.Search.Name),
             };
 
             return this.View(allSearchedProductsModel);
