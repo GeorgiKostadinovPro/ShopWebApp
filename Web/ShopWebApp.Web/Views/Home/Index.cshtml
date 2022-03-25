@@ -21,11 +21,11 @@
 <pre class="tab"></pre>
 
  <form style="margin: auto;" method="post" asp-controller="Products" asp-action="Search">
-                <div class="row- rounded-pill text-center">
+                <div class="row- rounded-pill text-center" style="right: 100px;">
                     <input asp-for="@this.Model.Search.Name" class="form-control" placeholder="What are you looking for?">
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-success">Go!</button>
+                    <button type="submit" class="btn btn-success">Search</button>
                 </div>
             </form>
 
