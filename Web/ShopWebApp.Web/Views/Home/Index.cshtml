@@ -37,12 +37,13 @@
     <div class="row row-cols-1 row-cols-xs-2 row-cols-sm-2 row-cols-lg-4 g-3" style="margin-top: 100px;">
         @foreach(var product in Model.Products)
         {
-             <div class="col">
+             <div class="col" style="margin-bottom: 20px;">
                        <div class="card h-100 shadow-sm"> <img src="@product.ImageURL" class="card-img-top" alt="...">
                            <div class="label-top shadow-sm">@product.Name</div>
                            <div class="card-body">
                                <div class="clearfix mb-3"> <span class="float-start badge rounded-pill bg-success" style="margin-left: 10px; margin-right: 10px;">@product.Price lv.</span> <span class="float-end"><a href="#" class="small text-dark" style="font-size: 15px;">Stock: @product.Stock</a></span> </div>
                                <h5 class="card-title" style="text-align: center;">@product.Description</h5>
+                                  <div class="text-center my-4"> <a asp-controller="Products" asp-action="Update" asp-route-id="@product.Id" class="btn btn-warning">Update</a> </div>
                                <div class="text-center my-4"> <a asp-controller="Products" asp-action="Delete" asp-route-id="@product.Id" class="btn btn-warning">Delete</a> </div>
                                <div class="clearfix mb-1"> <span class="float-start"><i class="far fa-question-circle"></i></span> <span class="float-end"><i class="fas fa-plus"></i></span> </div>
                            </div>

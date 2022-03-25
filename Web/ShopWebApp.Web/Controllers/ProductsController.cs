@@ -32,6 +32,26 @@ namespace ShopWebApp.Web.Controllers
             return this.Redirect("/");
         }
 
+        public IActionResult Update(int id)
+        {
+            var inputModel = this.productsService.GetProductById<EditProductInputModel>(id);
+            return this.View(inputModel);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Update(int id, EditProductInputModel product)
+        {
+            if (!this.ModelState.IsValid)
+            {
+                product.Id = id;
+                return this.View(product);
+            }
+
+            await this.productsService.UpdateProduct(id, product);
+
+            return this.Redirect("/");
+        }
+
         public async Task<IActionResult> Delete(int id)
         {
             await this.productsService.DeleteProduct(id);
