@@ -1,4 +1,5 @@
-﻿using ShopWebApp.Web.ViewModels.Products;
+﻿using ShopWebApp.Data.Models;
+using ShopWebApp.Web.ViewModels.Products;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +13,11 @@ namespace ShopWebApp.Services.Data
 
         Task DeleteProduct(int productId);
 
+        Task UpdateProduct(int id, EditProductInputModel inputModel);
+
         ICollection<ProductViewModel> GetAll();
+
+        T GetProductById<T>(int id);
 
         ICollection<ProductViewModel> SearchProduct(string productName);
     }

@@ -54,11 +54,32 @@ namespace ShopWebApp.Services.Data
             await this.productsRepository.SaveChangesAsync();
         }
 
+        public async Task UpdateProduct(int id, EditProductInputModel inputModel)
+        {
+            Product product = this.productsRepository.All().FirstOrDefault(p => p.Id == id);
+
+            product.Name = inputModel.Name;
+            product.Description = inputModel.Description;
+            product.ImageURL = inputModel.ImageURL;
+            product.Price = inputModel.Price;
+            product.Stock = inputModel.Stock;
+
+            await this.productsRepository.SaveChangesAsync();
+        }
+
         public ICollection<ProductViewModel> GetAll()
         {
             return this.productsRepository.All().To<ProductViewModel>().Where(p => p.Stock > 0).ToList();
         }
-      
+
+        public T GetProductById<T>(int id)
+        {
+            return this.productsRepository.All()
+                .Where(p => p.Id == id)
+                .To<T>()
+                .FirstOrDefault();
+        }
+
         public ICollection<ProductViewModel> SearchProduct(string productName)
         {
             return this.productsRepository.All().To<ProductViewModel>()
