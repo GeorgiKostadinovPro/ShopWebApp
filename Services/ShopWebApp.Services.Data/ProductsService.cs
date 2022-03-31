@@ -13,10 +13,12 @@ namespace ShopWebApp.Services.Data
     public class ProductsService : IProductsService
     {
         private readonly IDeletableEntityRepository<Product> productsRepository;
+        private readonly IDeletableEntityRepository<UserProduct> usersProductsRepository;
 
-        public ProductsService(IDeletableEntityRepository<Product> productsRepository)
+        public ProductsService(IDeletableEntityRepository<Product> productsRepository, IDeletableEntityRepository<UserProduct> usersProductsRepository)
         {
             this.productsRepository = productsRepository;
+            this.usersProductsRepository = usersProductsRepository;
         }
 
         public async Task CreateProduct(InputProductModel inputProductModel)
@@ -46,11 +48,21 @@ namespace ShopWebApp.Services.Data
                 .All()
                 .FirstOrDefault(p => p.Id == productId);
 
-            if (product != null)
+            List<UserProduct> usersProducts = this.usersProductsRepository.All()
+                .Where(up => up.ProductId == productId)
+                .ToList();
+
+            if (usersProducts.Count > 0)
             {
-                this.productsRepository.Delete(product);
+                foreach (var userProduct in usersProducts)
+                {
+                    this.usersProductsRepository.Delete(userProduct);
+                }
             }
 
+            this.productsRepository.Delete(product);
+
+            await this.usersProductsRepository.SaveChangesAsync();
             await this.productsRepository.SaveChangesAsync();
         }
 
@@ -84,6 +96,51 @@ namespace ShopWebApp.Services.Data
         {
             return this.productsRepository.All().To<ProductViewModel>()
                 .Where(p => p.Name.ToLower().Contains(productName.ToLower()))
+                .ToList();
+        }
+
+        public async Task AddToUser(string userId, int productId)
+        {
+           Product product = this.productsRepository.All().FirstOrDefault(p => p.Id == productId);
+
+           UserProduct userProduct = this.usersProductsRepository
+                .AllWithDeleted()
+                .FirstOrDefault(up => up.UserId == userId && up.ProductId == productId);
+
+           if (userProduct == null)
+           {
+                await this.usersProductsRepository.AddAsync(new UserProduct { UserId = userId, ProductId = product.Id });
+           }
+           else
+           {
+                if (userProduct.IsDeleted)
+                {
+                    this.usersProductsRepository.Undelete(userProduct);
+                }
+                else
+                {
+                    throw new ArgumentException("You have already added this product!");
+                }
+           }
+
+           await this.usersProductsRepository.SaveChangesAsync();
+        }
+
+        public async Task RemoveProductFromUserCollection(string userName, int productId)
+        {
+            UserProduct userProduct = this.usersProductsRepository.All()
+                .FirstOrDefault(up => up.User.UserName == userName && up.ProductId == productId);
+
+            this.usersProductsRepository.Delete(userProduct);
+
+            await this.usersProductsRepository.SaveChangesAsync();
+        }
+
+        public ICollection<UserProductViewModel> GetAllPerUser(string username)
+        {
+            return this.usersProductsRepository.All()
+                .To<UserProductViewModel>()
+                .Where(up => up.UserName == username)
                 .ToList();
         }
     }

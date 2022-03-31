@@ -15,6 +15,12 @@ namespace ShopWebApp.Services.Data
 
         Task UpdateProduct(int id, EditProductInputModel inputModel);
 
+        Task AddToUser(string userId, int prodcutId);
+
+        Task RemoveProductFromUserCollection(string userName, int productId);
+
+        ICollection<UserProductViewModel> GetAllPerUser(string username);
+
         ICollection<ProductViewModel> GetAll();
 
         T GetProductById<T>(int id);
