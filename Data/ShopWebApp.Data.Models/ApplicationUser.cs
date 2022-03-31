@@ -16,7 +16,11 @@ namespace ShopWebApp.Data.Models
             this.Roles = new HashSet<IdentityUserRole<string>>();
             this.Claims = new HashSet<IdentityUserClaim<string>>();
             this.Logins = new HashSet<IdentityUserLogin<string>>();
+
+            this.Products = new HashSet<UserProduct>();
         }
+
+        public virtual ICollection<UserProduct> Products { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

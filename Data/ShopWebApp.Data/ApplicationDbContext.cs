@@ -26,6 +26,8 @@
 
         public DbSet<Product> Products { get; set; }
 
+        public DbSet<UserProduct> UsersProducts { get; set; }
+
         public DbSet<Setting> Settings { get; set; }
 
 
@@ -51,6 +53,20 @@
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+
+            builder.Entity<UserProduct>().HasKey(up => new { up.UserId, up.ProductId });
+
+            builder.Entity<UserProduct>()
+                .HasOne(up => up.User)
+                .WithMany(u => u.Products)
+                .HasForeignKey(up => up.UserId);
+
+            builder.Entity<UserProduct>()
+              .HasOne(up => up.Product)
+              .WithMany(u => u.Users)
+              .HasForeignKey(up => up.ProductId);
+
 
             this.ConfigureUserIdentityRelations(builder);
 

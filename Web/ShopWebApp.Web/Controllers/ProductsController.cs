@@ -1,6 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using ShopWebApp.Common;
+using ShopWebApp.Data.Models;
 using ShopWebApp.Services.Data;
 using ShopWebApp.Web.ViewModels.Products;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -9,12 +14,15 @@ namespace ShopWebApp.Web.Controllers
     public class ProductsController : BaseController
     {
         private readonly IProductsService productsService;
+        private readonly UserManager<ApplicationUser> userManager;
 
-        public ProductsController(IProductsService productsService)
+        public ProductsController(IProductsService productsService, UserManager<ApplicationUser> userManager)
         {
             this.productsService = productsService;
+            this.userManager = userManager;
         }
 
+        
         public IActionResult Create()
         {
             return this.View();
@@ -68,6 +76,40 @@ namespace ShopWebApp.Web.Controllers
             };
 
             return this.View(allSearchedProductsModel);
+        }
+
+        public async Task<IActionResult> AddProductToUser(int id)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            try
+            {
+                await this.productsService.AddToUser(user.Id, id);
+            }
+            catch (Exception ex)
+            {
+                this.TempData["AlreadyAdded"] = ex.Message;
+            }
+
+            return this.Redirect("/");
+        }
+
+        public async Task<IActionResult> RemoveProductFromUserCollection(int id)
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            await this.productsService.RemoveProductFromUserCollection(user.UserName, id);
+
+            return this.Redirect("/");
+        }
+
+        public async Task<IActionResult> GetUserCollection()
+        {
+            ApplicationUser user = await this.userManager.GetUserAsync(this.User);
+
+            var userProducts = this.productsService.GetAllPerUser(user.UserName);
+
+            return this.View(userProducts);
         }
     }
 }

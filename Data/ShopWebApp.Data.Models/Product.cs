@@ -7,6 +7,11 @@ namespace ShopWebApp.Data.Models
 {
     public class Product : BaseDeletableModel<int>
     {
+        public Product()
+        {
+            this.Users = new HashSet<UserProduct>();
+        }
+
         [Required]
         public string Name { get; set; }
 
@@ -17,6 +22,8 @@ namespace ShopWebApp.Data.Models
         public decimal Price { get; set; }
 
         public int Stock { get; set; }
+
+        public virtual ICollection<UserProduct> Users { get; set; }
 
     }
 }
