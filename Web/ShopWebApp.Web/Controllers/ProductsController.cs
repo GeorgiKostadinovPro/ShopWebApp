@@ -22,7 +22,6 @@ namespace ShopWebApp.Web.Controllers
             this.userManager = userManager;
         }
 
-        
         public IActionResult Create()
         {
             return this.View();
@@ -37,7 +36,7 @@ namespace ShopWebApp.Web.Controllers
             }
 
             await this.productsService.CreateProduct(inputModel);
-            return this.Redirect("/");
+            return this.RedirectToAction("CRUDPanelProductsList", "Products");
         }
 
         public IActionResult Update(int id)
@@ -57,14 +56,14 @@ namespace ShopWebApp.Web.Controllers
 
             await this.productsService.UpdateProduct(id, product);
 
-            return this.Redirect("/");
+            return this.RedirectToAction("CRUDPanelProductsList", "Products");
         }
 
         public async Task<IActionResult> Delete(int id)
         {
             await this.productsService.DeleteProduct(id);
 
-            return this.Redirect("/");
+            return this.RedirectToAction("CRUDPanelProductsList", "Products");
         }
 
         [HttpPost]
@@ -100,7 +99,7 @@ namespace ShopWebApp.Web.Controllers
 
             await this.productsService.RemoveProductFromUserCollection(user.UserName, id);
 
-            return this.Redirect("/");
+            return this.RedirectToAction("GetUserCollection", "Products");
         }
 
         public async Task<IActionResult> GetUserCollection()
@@ -110,6 +109,16 @@ namespace ShopWebApp.Web.Controllers
             var userProducts = this.productsService.GetAllPerUser(user.UserName);
 
             return this.View(userProducts);
+        }
+
+        public IActionResult CRUDPanelProductsList()
+        {
+            AllSearchedProductsViewModel model = new AllSearchedProductsViewModel()
+            {
+                Products = this.productsService.GetAll(),
+            };
+
+            return this.View(model);
         }
     }
 }
