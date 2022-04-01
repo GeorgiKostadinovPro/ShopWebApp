@@ -29,7 +29,7 @@
    </div>  
 
     <div class="container-button">
-      <a class="button-animated" asp-controller="Products" asp-action="Create">Add Product</a>
+      <a class="button-animated" asp-controller="Products" asp-action="CRUDPanelProductsList">CRUD Operations</a>
    </div>  
 
     <pre class="tab"></pre>
@@ -57,8 +57,6 @@
                                <div class="clearfix mb-3"> <span class="float-start badge rounded-pill bg-success" style="margin-left: 10px; margin-right: 10px;">@product.Price lv.</span> <span class="float-end"><a href="#" class="small text-dark" style="font-size: 15px;">Stock: @product.Stock</a></span> </div>
                                <h5 class="card-title" style="text-align: center;">@product.Description</h5>
                                <div class="text-center my-4"> <a asp-controller="Products" asp-action="AddProductToUser" asp-route-id="@product.Id" class="btn btn-warning">Add</a> </div>
-                                  <div class="text-center my-4"> <a asp-controller="Products" asp-action="Update" asp-route-id="@product.Id" class="btn btn-warning">Update</a> </div>
-                               <div class="text-center my-4"> <a asp-controller="Products" asp-action="Delete" asp-route-id="@product.Id" class="btn btn-warning">Delete</a> </div>
                                <div class="clearfix mb-1"> <span class="float-start"><i class="far fa-question-circle"></i></span> <span class="float-end"><i class="fas fa-plus"></i></span> </div>
                            </div>
                        </div>
